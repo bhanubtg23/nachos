@@ -1,0 +1,60 @@
+                                                                     Project 0 - Group 9
+								-----------------------------
+														   
+a) 
+Nachos: It is a user level operating system application written in c++ moslty used to understand the internal structure and the responsibilites of the operating system like threads, process, interrupts, etc. As a shell interface here we are using putty to launch the virtual host maching through SSH.
+Nachos Installation: 
+Connect to the host machine wolf.cs.fiu.edu
+mkdir dirname: create a new folder as nachos.
+cd dirname: then navigating into a specified directory on server.
+wget: Now we will download the file of nachos from the web using wget command. 
+tar xzvf: now we will unzip and extract the source files from the archive. so finally it will extract our archive into the nachos directory on my linux wolf machine.
+          where x means it will extract files from archive.
+		        z means unzip.
+				v means it will print the file names verbosely.
+				f means the following argument is filename.z
+ls: now we will list out the information about the files.
+        appData/  Documents/  Movies/  nachos/    Videos/
+            Desktop/  Downloads/  Music/   Pictures/			
+	Before compiling we have verified make and gcc are present in our path, by using the below commands. 
+	                    /usr/bin/make - it will make sure that make is present in our path
+						/usr/bin/gcc - so gcc is also present in our path.
+			echo $LD_LIBRARY_PATH - verified whether this directory is present in the environment "/usr/local/lib" as '/usr/sfw/lib:/usr/openwin/lib:/usr/lib:/usr/ucblib:/usr/dt/lib:/usr/local/lib'
+			
+make: we used the make command to compile the nachos from the directory nachos-3.4/code. To execute the threads we navigated to the directory "cd threads". the command used to execute the threads is <./nachos> from this directory we are executing the threads  --  vmudd002@wolf:~/nachos/nachos-3.4/code/threads 40% ./nachos 
+after executing the above command, we have observed the result as mentioned in the Project 0 description document.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+b)
+Experience with tests:
+Threadtest() method is invoked in threadtest.cc which is present in the threads subdirectory and testnum is initialized as 1.
+We observed multi threaded programming in nachos threadtest.cc where child thread is created.
+ In the ThreadTest function, ThreadTest1 function is invoked where a new thread and it's child thread is created. 
+ 
+ As per the observation, SimpleThread function is executed by the parent thread. In the SimpleThread function during the first iteration, yield function is called, parent thread - thread0 is moved to runnable state. As the child thread-thread1 is already in ready state, it went to running state and executed the function call simpleThread which again calls the yield function. Hence, in the output console two threads have executed the for loop alternatively because of the yield function.
+
+halt system call is used for shutting down the system, where it throws an interrupt causing the currently running executable to stop and shutdown the system. In the halt system call, it logs the message, prints the statistics(performance metrics) and then it does the cleanup where the network, user_program, file_system and disk objects are deallocated if created from heap using delete. It also deletes the timer, scheduler and the interrupt objects.
+
+We have run the nachos halt in single step mode using -s, where each step is run for one system tick. As it's executed in step by step mode, the program counter is increased 4 bytes for each step. We observed most of the registers to be 0 as there aren't any complex programs therefore the registers are left unused
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+c)
+Thread def: 
+thread class has two variables.
+1) stacktop - stack pointer
+2) machinestate array - all register of thread except stacktop
+thread constructor - initialising a thread
+destructor for de-allocating a thread
+
+thread operations-
+fork() - make a thread run a new function
+yield() - make the cpu available for any other thread if runnable
+sleep() - put the thread to sleep and change the processor state to blocked
+finish() - completion of thread execution
+
+checkoverflow() - check if thread stack overflown
+switch() - running new thread and stopping old thread
+setstatus() - to set the status of the thread
+stackallocate() - private function used by fork function to allocate a stack for the thread
+
+

@@ -1,0 +1,25 @@
+OS Project - 3
+
+Project team members:
+1. Sheetal Pavan Mende
+2. Venkata Bhargav Mudda
+3. Bhanodaya Tilak Gujjula
+
+System call: 
+
+Open:
+From the path, search sysopenfile in sysopenfile table. If it exists, increase the count and new useropenfile is created and add to pcb list of files. If no sysopenfile is found filesystem open function is called. If done without any error, new sysopenfile object is created. Then write the new created useropenfile id to register 2.
+
+close:
+reading file id from register 4. when valid id, search the current PCB for a matching useropenfile. If one is found, it is removed from PCB list of files. Id is freed and use the index to find the required sysopenfile in filemanager and decrement its process count. If count is 0, we remove the sysopenfile from file manager and free the id.
+
+Write:
+Fetched the buffer_pointer, size and file_id from the register 4, 5 and 6. For stdout, copy from the buffer to the stdin a page. If id is valid, copy data from buffer to file.
+
+Read :
+Fetched the buffer_pointer, size and file_id from the register 4, 5 and 6. Then read from the file id. If stdin, read ch by ch into buffer until we reach the specified size. If from a file, find required useropenfile, and it exists, we index to get sysopenfile. read required bytes, update useropenfile offset.
+
+
+We have implemented the system call open, close, read and write. Included the logic in exception.cc. We are facing issue resolving the dependencies when building the project when all the four system calls were implemented.
+
+

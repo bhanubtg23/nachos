@@ -1,0 +1,179 @@
+OS Project - 1
+
+Project team members:
+1. Sheetal Pavan Mende
+2. Venkata Bhargav Mudda
+3. Bhanodaya Tilak Gujjula
+
+=============================================================================================================================================
+
+Exercise 1: Simple Threading (Status : Completed)
+
+Semaphore an integer variable is shared between the threads. Wait and Signal are the two atomic operations used for
+process synchronization. Used Semaphores to synchronize the SimpleThread(). Critical section is surrounded by P() 
+operation and V() operation. Then a barrier is used to stop the early finishing threads.
+semaphore is always initialized to one. 
+P() -> wait, sleep
+V() -> signal, wake-up 
+
+vmudd002@wolf:~/nachosdir/nachos-3.4/code/threads 173% ./nachos -rs ..32
+NumthreadsActive = 5
+*** thread 0 sees value 0
+*** thread 1 sees value 1
+*** thread 2 sees value 2
+*** thread 3 sees value 3
+*** thread 4 sees value 4
+*** thread 0 sees value 5
+*** thread 1 sees value 6
+*** thread 2 sees value 7
+*** thread 3 sees value 8
+*** thread 4 sees value 9
+*** thread 3 sees value 10
+*** thread 1 sees value 11
+*** thread 2 sees value 12
+*** thread 0 sees value 13
+*** thread 4 sees value 14
+*** thread 3 sees value 15
+*** thread 1 sees value 16
+*** thread 3 sees value 17
+*** thread 0 sees value 18
+*** thread 4 sees value 19
+*** thread 0 sees value 20
+*** thread 1 sees value 21
+*** thread 2 sees value 22
+*** thread 4 sees value 23
+*** thread 2 sees value 24
+Thread 2 sees final value 25
+Thread 1 sees final value 25
+Thread 0 sees final value 25
+Thread 4 sees final value 25
+Thread 3 sees final value 25
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 1581, idle 71, system 1510, user 0
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+=======================================================================================================================
+
+Exercise 2 : Implementing Locks  (Status : Completed)
+
+Locks identical to the semaphores implementation. Locks allows only one thread to acquire the lock at a time.
+Lock keep track of thread which it acquired. Releasing operation is done only when the thread is holding the 
+lock. And then implemented the locktest.cc using lock operations.
+
+
+vmudd002@wolf:~/nachosdir/nachos-3.4/code/threads 168% ./nachos -rs ..32
+*** thread 0 sees counter value 0
+*** thread 1 sees counter value 1
+*** thread 2 sees counter value 2
+*** thread 3 sees counter value 3
+*** thread 0 sees counter value 4
+*** thread 1 sees counter value 5
+*** thread 2 sees counter value 6
+*** thread 3 sees counter value 7
+*** thread 0 sees counter value 8
+*** thread 1 sees counter value 9
+*** thread 2 sees counter value 10
+*** thread 3 sees counter value 11
+Thread 2 sees final value 12
+Thread 1 sees final value 12
+Thread 0 sees final value 12
+Thread 3 sees final value 12
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 774, idle 114, system 660, user 0
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+======================================================================================================================
+
+Exercise 3 : Implementing Conditions   (Status : Completed)
+
+Conditions is also similar to the semaphores and locks implementation. In condition we do not have the value 
+to check internally during function calls. List of threads waiting on condition. which means they are in blocked
+state through a sleep() call. Operations on the condition variable are Wait(), Signal(), Broadcast()
+Wait() - Lock passed in is acquired by the thread calling before it is put into sleep, thread releases the lock
+for the use of other threads. Signal() or Broadcast()- threas waiting on the condition will be awoken and attempt
+re-acquire the lock. Signal() - wakes up the single thread where Broadcast() wake up all the threads waiting on the 
+condition.
+
+
+vmudd002@wolf:~/nachosdir/nachos-3.4/code/threads 163% ./nachos -rs ..32
+pong
+ping
+pong
+ping
+pong
+ping
+pong
+ping
+pong
+ping
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 458, idle 98, system 360, user 0
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+======================================================================================================================
+
+Exercise 4 : Elevator  (Status : Completed)
+
+Elevator implemented using Condition and Lock operations. Elevator must acquire the lock before it changes the floor.
+Signal() wakes up the thread waiting on the condition. elevator is created for 5 floors. Elevator will take a particular
+person to the required floor till then the person will be waiting at the required floor to get into the elevator.
+
+vmudd002@wolf:~/nachosdir/nachos-3.4/code/threads 127% ./nachos -rs ..32
+Elevator with 5 floors was created!
+Person 1 wants to go from floor 2 to 3
+Elevator arrives at Floor 2
+Person 1 got into the elevator at floor 2.
+Elevator reached to Floor 3
+Person 1 got out of the elevator at floor 3.
+Person 2 wants to go from floor 3 to 1
+Elevator arrives at Floor 3
+Person 2 got into the elevator at floor 3.
+Elevator reached to Floor 2
+Person 3 wants to go from floor 4 to 5
+Elevator reached to Floor 1
+Person 2 got out of the elevator at floor 1.
+Person 4 wants to go from floor 2 to 3
+Elevator arrives at Floor 2
+Person 4 got into the elevator at floor 2.
+Elevator reached to Floor 3
+Person 4 got out of the elevator at floor 3.
+Person 5 wants to go from floor 2 to 3
+Elevator arrives at Floor 2
+Person 5 got into the elevator at floor 2.
+Elevator reached to Floor 3
+Person 5 got out of the elevator at floor 3.
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 55263063, idle 53, system 55263010, user 0
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...

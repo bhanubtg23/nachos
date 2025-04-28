@@ -1,0 +1,290 @@
+OS Project - 2
+
+Project team members:
+1. Sheetal Pavan Mende
+2. Venkata Bhargav Mudda
+3. Bhanodaya Tilak Gujjula
+
+
+---Halt system calls:
+Just call the interrupt stop function.
+
+-----Exit system call:
+Following the suggestions made during the lab session, we have confirmed the following:
+If the calling process has children, zombify them. for the process
+If the also has parents, remove them from that parent's list of children.
+PCBManager then removes her PCB in the process from its list. Then the process
+Frees the page it had and its PID. finally the process wakes up
+Other processes wait for it and call the thread:
+:
+finished.
+
+-----Exec syscall.
+First, the function tries to get the executable.
+specified path. If successful, updates the address space of the current process
+have actionable information. This includes updating the PC register.
+Start at the beginning of the new executable code.
+
+----Join system call:
+If the process you want to join is a child process of the caller, the parent process
+It just waits for the child board's condition variable. as soon as the baby comes out
+The waiting parent wakes up and continues walking.
+
+-----Fork system call:
+Here we save and clone the registers of the current process
+its address space. Then create a new thread and a new circuit board for the new process. or
+After receiving a new PID, a new PCB is added to the PCBManager. This is also added
+A list of children of the calling process. Finally the new thread runs a dummy
+A function to call after restoring the new process registration to the machine
+Machine running function.
+
+-----Kill system call:
+If the PID is the same as the caller, execute the terminating syscall code. If the process you kill has child processes, they become zombies. process
+It is also deleted from the parent-child list. The exit status is then set on the circuit board.
+The pages and PIDs used by the process are then freed. Finally, all waiting threads are awakened and
+The thread is marked for destruction and the scheduler finds the next thread.
+process to run. 
+
+------Yield() system call:
+Call the thread yield function.
+
+
+
+Output:
+
+************************************************************************************************************************
+Fork:
+
+bgujj001@ocelot:~/tilakbh/os_11_26/nachos_os_1/nachos-3.4/code/userprog 176% ./nachos -x ../test/fork
+PCB size = 4
+Progtest: start process
+Initialising address space: Code data: 576, Initialised Data: 16, Uninitalised Data: 0, User stack size: 1024Total size: 1616 
+allocating pcb 
+PCB allocation completed 
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 13 pages memory .
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Exit) system call
+Process (1) exits with (101) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 13 pages memory .
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Exit) system call
+Process (1) exits with (101) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 13 pages memory .
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Exit) system call
+Process (1) exits with (101) system call
+System Call: (0) invoked (Exit) system call
+Process (0) exits with (4) system call
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 5032, idle 0, system 100, user 4932
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+************************************************************************************************************************
+Yield:
+
+bgujj001@ocelot:~/tilakbh/os_11_26/nachos_os_1/nachos-3.4/code/userprog 177% ./nachos -x ../test/yield
+PCB size = 4
+Unable to open file ../test/yield
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 10, idle 0, system 10, user 0
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+************************************************************************************************************************
+Exit:
+
+bgujj001@ocelot:~/tilakbh/os_11_26/nachos_os_1/nachos-3.4/code/userprog 178% ./nachos -x ../test/exit
+PCB size = 4
+Progtest: start process
+Initialising address space: Code data: 368, Initialised Data: 0, Uninitalised Data: 512, User stack size: 1024Total size: 1904 
+allocating pcb 
+PCB allocation completed 
+System Call: (0) invoked (Exit) system call
+Process (0) exits with (0) system call
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 2462, idle 0, system 10, user 2452
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+************************************************************************************************************************
+Exec:
+
+bgujj001@ocelot:~/tilakbh/os_11_26/nachos_os_1/nachos-3.4/code/userprog 179% ./nachos -x ../test/exec
+PCB size = 4
+Progtest: start process
+Initialising address space: Code data: 400, Initialised Data: 16, Uninitalised Data: 0, User stack size: 1024Total size: 1440 
+allocating pcb 
+PCB allocation completed 
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 12 pages memory .
+System Call: (0) invoked (Yield) system call 
+current  parent pcb is 0 
+deallocated pcb 
+Initialising address space: Code data: 368, Initialised Data: 0, Uninitalised Data: 512, User stack size: 1024Total size: 1904 
+allocating pcb 
+PCB allocation completed 
+Syscall Call: [2] invoked Exec 
+System Call: (2) invoked (Exit) system call
+Process (2) exits with (0) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 2 
+Process 0 Fork: starting address 34 with 12 pages memory .
+System Call: (0) invoked (Yield) system call 
+current  parent pcb is 0 
+deallocated pcb 
+Initialising address space: Code data: 368, Initialised Data: 0, Uninitalised Data: 512, User stack size: 1024Total size: 1904 
+allocating pcb 
+PCB allocation completed 
+Syscall Call: [3] invoked Exec 
+System Call: (3) invoked (Exit) system call
+Process (3) exits with (0) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 3 
+Process 0 Fork: starting address 34 with 12 pages memory .
+System Call: (0) invoked (Yield) system call 
+current  parent pcb is 0 
+deallocated pcb 
+Initialising address space: Code data: 368, Initialised Data: 0, Uninitalised Data: 512, User stack size: 1024Total size: 1904 
+allocating pcb 
+PCB allocation completed 
+Syscall Call: [4] invoked Exec 
+System Call: (4) invoked (Exit) system call
+Process (4) exits with (0) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 4 
+Process 0 Fork: starting address 34 with 12 pages memory .
+System Call: (0) invoked (Yield) system call 
+current  parent pcb is 0 
+deallocated pcb 
+Initialising address space: Code data: 368, Initialised Data: 0, Uninitalised Data: 512, User stack size: 1024Total size: 1904 
+allocating pcb 
+PCB allocation completed 
+Syscall Call: [5] invoked Exec 
+System Call: (5) invoked (Exit) system call
+Process (5) exits with (0) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 5 
+Process 0 Fork: starting address 34 with 12 pages memory .
+System Call: (0) invoked (Yield) system call 
+current  parent pcb is 0 
+deallocated pcb 
+Initialising address space: Code data: 368, Initialised Data: 0, Uninitalised Data: 512, User stack size: 1024Total size: 1904 
+allocating pcb 
+PCB allocation completed 
+Syscall Call: [6] invoked Exec 
+System Call: (6) invoked (Exit) system call
+Process (6) exits with (0) system call
+System Call: (0) invoked (Exit) system call
+Process (0) exits with (0) system call
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 12595, idle 0, system 160, user 12435
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+************************************************************************************************************************
+Kill:
+
+bgujj001@ocelot:~/tilakbh/os_11_26/nachos_os_1/nachos-3.4/code/userprog 180% ./nachos -x ../test/kill
+PCB size = 4
+Progtest: start process
+Initialising address space: Code data: 400, Initialised Data: 0, Uninitalised Data: 0, User stack size: 1024Total size: 1424 
+allocating pcb 
+PCB allocation completed 
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 12 pages memory .
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Yield) system call 
+inside kill 
+deleted killing thread space 
+after killingSystem Call: (0) invoked (Exit) system call
+Process (0) exits with (0) system call
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 84, idle 0, system 40, user 44
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
+************************************************************************************************************************
+Join:
+
+bgujj001@ocelot:~/tilakbh/os_11_26/nachos_os_1/nachos-3.4/code/userprog 181% ./nachos -x ../test/join
+PCB size = 4
+Progtest: start process
+Initialising address space: Code data: 656, Initialised Data: 16, Uninitalised Data: 0, User stack size: 1024Total size: 1696 
+allocating pcb 
+PCB allocation completed 
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 14 pages memory .
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Exit) system call
+Process (1) exits with (1) system call
+System Call: (0) invoked (Fork) system call
+Fork - process id - 1 
+Process 0 Fork: starting address 34 with 14 pages memory .
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Yield) system call 
+System Call: (0) invoked (Fork) system call
+System Call: (0) invoked (Yield) system call 
+System Call: (1) invoked (Exit) system call
+Process (1) exits with (102) system call
+System Call: (0) invoked (Join) system call 
+System Call: (0) invoked (Join) system call 
+System Call: (0) invoked (Join) system call 
+System Call: (0) invoked (Exit) system call
+Process (0) exits with (3) system call
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
+
+Ticks: total 1817, idle 0, system 90, user 1727
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+
+Cleaning up...
+
